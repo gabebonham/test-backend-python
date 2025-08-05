@@ -1,0 +1,9 @@
+{
+  "tech": "python3,fastapi",
+  "venv": "projvenv",
+  "host": "localhost",
+  "port": "8000",
+  "install": "projenv/bin/pip install -r requirements.txt",
+  "run": "projenv/bin/python -m uvicorn main:app --reload",
+  "execute": ["install", "run"]
+}
