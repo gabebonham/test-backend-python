@@ -19,14 +19,19 @@ class PerguntaService:
             perguntas = self.repository.getAll(ordem,limite,offset) or []
             for pergunta in perguntas:
                 respostas = self.service.getFiltered(idPergunta=pergunta.id) or []
-                perguntaDto = map_to_pergunta_dto(pergunta, respostas)
-                perguntasDto.append(perguntaDto)
+                if respostas:
+                    perguntaDto = map_to_pergunta_dto(pergunta, respostas)
+                    perguntasDto.append(perguntaDto)
             return perguntasDto
         except Exception as e:
             self.log.error(e)
     def getById(self, id: str):
         try:
-            return self.repository.getById(id)
+            pergunta =  self.repository.getById(id)
+            respostas = self.service.getFiltered(idPergunta=pergunta.id) or []
+            if respostas:
+                return map_to_pergunta_dto(pergunta, respostas)
+            return map_to_pergunta_dto(pergunta)
         except Exception as e:
             self.log.error(e)
     def getFiltered(self, ordem: str = 'desc', 
@@ -53,8 +58,9 @@ class PerguntaService:
                                                offset)
             for pergunta in perguntas:
                 respostas = self.service.getFiltered(idPergunta=pergunta.id) or []
-                perguntaDto = map_to_pergunta_dto(pergunta, respostas)
-                perguntasDto.append(perguntaDto)
+                if respostas:
+                    perguntaDto = map_to_pergunta_dto(pergunta, respostas)
+                    perguntasDto.append(perguntaDto)
             return perguntasDto
         except Exception as e:
             self.log.error(e)

@@ -71,8 +71,6 @@ class RespostaPerguntaRepository:
                 results = self.executeQuery(query)
                 if results is None:
                     return []
-                print(results)
-                print(results.fetchall())
                 return results.fetchall()
 
             except Exception as e:

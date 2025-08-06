@@ -9,5 +9,5 @@ class RespostaDTO(BaseModel):
     resposta: Optional[str] = None
     ordem: Optional[int] = None
     respostaaberta: Optional[bool] = None
-    vezesrespondidas: Optional[list] = None
+    vezesrespondidas: Optional[int] = None
     createdat: Optional[datetime] = None

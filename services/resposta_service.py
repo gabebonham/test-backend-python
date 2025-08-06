@@ -3,6 +3,7 @@ from utils.log_util import LogUtil
 from repository.resposta_repository import RespostaRepository
 from services.resposta_pergunta_service import RespostaPerguntaService
 from models.resposta import Resposta
+from mappers.mapper import map_resposta_to_dto
 class RespostaService:
     def __init__(self):
         self.log = LogUtil().log
@@ -14,22 +15,27 @@ class RespostaService:
                limite: int = 10, 
                offset: int = 0):
         try:
+            respostasDto = []
             respostas = self.repository.getAll(ordem,limite,offset)
             for resposta in respostas:
                 vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
                 if vezesrespondidas:
-                    resposta.vezesrespondidas = vezesrespondidas
-            return respostas
+                    respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
+                    respostaDto.vezesrespondidas = vezesrespondidas
+                    respostasDto.append(respostaDto)
+            return respostasDto
         except Exception as e:
             self.log.error(e)
     def getById(self, id: str):
         try:
+            respostasDto= []
             resposta = self.repository.getById(id)
             vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
             if vezesrespondidas:
-                resposta.vezesrespondidas = vezesrespondidas
-            
-            return resposta
+                respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
+                respostaDto.vezesrespondidas = vezesrespondidas
+                respostasDto.append(respostaDto)
+            return respostasDto
         except Exception as e:
             self.log.error(e)
     def getFiltered(self, ordem: str = 'desc', 
@@ -39,7 +45,15 @@ class RespostaService:
                     resposta: str = None,
                     respostaAberta: bool = False):
         try:
-            return self.repository.getFiltered(ordem,limit,offset,idPergunta,resposta,respostaAberta)
+            respostasDto = []
+            respostas = self.repository.getFiltered(ordem,limit,offset,idPergunta,resposta,respostaAberta)
+            for resposta in respostas:
+                vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
+                if vezesrespondidas:
+                    respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
+                    respostaDto.vezesrespondidas = vezesrespondidas
+                    respostasDto.append(respostaDto)
+            return respostasDto
         except Exception as e:
             self.log.error(e)
     def create(self, resposta: Resposta):

@@ -20,7 +20,6 @@ class RespostasController:
                      offset: Optional[int] = Query(0)
                      ):
         data = self.service.getAll(ordem, limite, offset)
-        print(data)
         lista = [obj_to_dict(row) for row in data]
         return lista
     async def getFiltered(self,ordem: Optional[str] = Query(None), 
@@ -33,7 +32,8 @@ class RespostasController:
         lista = [obj_to_dict(row) for row in data]
         return lista
     async def getById(self, id:str):
-        return obj_to_dict(self.service.getById(id))
+        data = self.service.getById(id)
+        return obj_to_dict(data)
     
     async def create(self, resposta:Resposta):
         return obj_to_dict(self.service.create(resposta))

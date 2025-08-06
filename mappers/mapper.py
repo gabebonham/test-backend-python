@@ -21,8 +21,8 @@ def obj_to_dict(obj):
     
     
 
-def map_formulario_to_dto(model: Formulario, perguntas: list=[]) -> FormularioDTO:
-    return FormularioDTO(
+def map_formulario_to_dto(model: Formulario|FormularioDTO, perguntas: list=[]) -> FormularioDTO:
+    return model if isinstance(model,FormularioDTO) else FormularioDTO(
         id=model.id,
         titulo=model.titulo,
         descricao=model.descricao,
@@ -30,16 +30,16 @@ def map_formulario_to_dto(model: Formulario, perguntas: list=[]) -> FormularioDT
         ordem=model.ordem,
         createdAt=model.createdat,
     )
-def map_formulario_to_dto_no_pergunta(model: Formulario, perguntas: list=[]) -> FormularioDTO:
-    return FormularioDTO(
+def map_formulario_to_dto_no_pergunta(model: Formulario|FormularioDTO, perguntas: list=[]) -> FormularioDTO:
+    return model if isinstance(model,FormularioDTO) else FormularioDTO(
         id=model.id,
         titulo=model.titulo,
         descricao=model.descricao,
         perguntas=perguntas,
         ordem=model.ordem,
         createdAt=model.createdat)
-def map_to_pergunta_dto(pergunta: Pergunta, respostas: list = []) -> PerguntaDTO:
-    return PerguntaDTO(
+def map_to_pergunta_dto(pergunta: Pergunta|PerguntaDTO, respostas: list = []) -> PerguntaDTO:
+    return pergunta if isinstance(pergunta,PerguntaDTO) else PerguntaDTO(
         id=pergunta.id,
         idformulario=pergunta.idformulario,
         titulo=pergunta.titulo,
@@ -52,13 +52,14 @@ def map_to_pergunta_dto(pergunta: Pergunta, respostas: list = []) -> PerguntaDTO
         tipopergunta=pergunta.tipopergunta,
         respostas=[map_resposta_to_dto(r) for r in respostas]
     )
-def map_resposta_to_dto(resposta:Resposta):
-    return RespostaDTO(
+
+def map_resposta_to_dto(resposta:Resposta|RespostaDTO, vezesRespondidas:int=None):
+    return resposta if isinstance(resposta,RespostaDTO) else RespostaDTO(
         id=resposta.id,
         idpergunta=str(resposta.idpergunta),
         resposta=resposta.resposta,
         ordem=resposta.ordem,
         respostaaberta=resposta.respostaaberta,
-        vezesrespondidas=resposta.vezesrespondidas or [],
+        vezesrespondidas=vezesRespondidas or [],
         createdat=resposta.createdat
     )
