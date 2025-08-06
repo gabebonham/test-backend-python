@@ -60,6 +60,6 @@ def map_resposta_to_dto(resposta:Resposta|RespostaDTO, vezesRespondidas:int=None
         resposta=resposta.resposta,
         ordem=resposta.ordem,
         respostaaberta=resposta.respostaaberta,
-        vezesrespondidas=vezesRespondidas or [],
+        vezesrespondidas=vezesRespondidas or None,
         createdat=resposta.createdat
     )

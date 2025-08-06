@@ -19,10 +19,8 @@ class RespostaService:
             respostas = self.repository.getAll(ordem,limite,offset)
             for resposta in respostas:
                 vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
-                if vezesrespondidas:
-                    respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
-                    respostaDto.vezesrespondidas = vezesrespondidas
-                    respostasDto.append(respostaDto)
+                respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
+                respostasDto.append(respostaDto)
             return respostasDto
         except Exception as e:
             self.log.error(e)
@@ -30,11 +28,9 @@ class RespostaService:
         try:
             respostasDto= []
             resposta = self.repository.getById(id)
-            vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
-            if vezesrespondidas:
-                respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
-                respostaDto.vezesrespondidas = vezesrespondidas
-                respostasDto.append(respostaDto)
+            vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=id))
+            respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
+            respostasDto.append(respostaDto)
             return respostasDto
         except Exception as e:
             self.log.error(e)
@@ -47,12 +43,10 @@ class RespostaService:
         try:
             respostasDto = []
             respostas = self.repository.getFiltered(ordem,limit,offset,idPergunta,resposta,respostaAberta)
-            for resposta in respostas:
-                vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
-                if vezesrespondidas:
-                    respostaDto = map_resposta_to_dto(resposta, vezesrespondidas)
-                    respostaDto.vezesrespondidas = vezesrespondidas
-                    respostasDto.append(respostaDto)
+            for currentresposta in respostas:
+                vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=currentresposta.id))
+                respostaDto = map_resposta_to_dto(currentresposta, vezesrespondidas)
+                respostasDto.append(respostaDto)
             return respostasDto
         except Exception as e:
             self.log.error(e)

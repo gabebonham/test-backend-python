@@ -14,8 +14,7 @@ class RespostaPerguntaRepository:
         self.queryDelete = "DELETE FROM respostas_pergunta WHERE id = '{id}';"
         self.queryGetFiltered = (
             "SELECT * FROM respostas_pergunta "
-            " {where_clause} "
-            " LIMIT {limit} OFFSET {offset};"
+            " {where_clause} ; "
         )
         self.queryCreate = (
             "INSERT INTO respostas_pergunta (idOpcaoResposta, idPergunta) "
@@ -55,23 +54,18 @@ class RespostaPerguntaRepository:
                 filters = []
 
                 if idPergunta:
-                    filters.append(f"idPergunta = '{idPergunta}'")
+                    filters.append(f" idPergunta = '{idPergunta}' ")
 
                 if idOpcaoResposta:
-                    filters.append(f"idOpcaoResposta = '{idOpcaoResposta}'")
+                    filters.append(f" idOpcaoResposta = '{idOpcaoResposta}' ")
 
-                where_clause = f"WHERE {' AND '.join(filters)}" if filters else ""
-
+                where_clause = f" WHERE {' AND '.join(filters)}" if filters else ""
                 query = self.queryGetFiltered.format(
                     where_clause=where_clause,
-                    limit=limit,
-                    offset=offset,
                 )
 
-                results = self.executeQuery(query)
-                if results is None:
-                    return []
-                return results.fetchall()
+                result = self.executeQuery(query)
+                return result.fetchall() if result else []
 
             except Exception as e:
                 self.log.error(f'Erro ao buscar Resposta_Pergunta filtrados: {e}')

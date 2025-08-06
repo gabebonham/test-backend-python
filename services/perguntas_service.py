@@ -22,6 +22,9 @@ class PerguntaService:
                 if respostas:
                     perguntaDto = map_to_pergunta_dto(pergunta, respostas)
                     perguntasDto.append(perguntaDto)
+                else:
+                    perguntaDto = map_to_pergunta_dto(pergunta, respostas)
+                    perguntasDto.append(perguntaDto)
             return perguntasDto
         except Exception as e:
             self.log.error(e)
@@ -59,6 +62,9 @@ class PerguntaService:
             for pergunta in perguntas:
                 respostas = self.service.getFiltered(idPergunta=pergunta.id) or []
                 if respostas:
+                    perguntaDto = map_to_pergunta_dto(pergunta, respostas)
+                    perguntasDto.append(perguntaDto)
+                else:
                     perguntaDto = map_to_pergunta_dto(pergunta, respostas)
                     perguntasDto.append(perguntaDto)
             return perguntasDto
