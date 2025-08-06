@@ -26,7 +26,10 @@ class FormularioService:
             self.log.error(e)
     def getById(self, id: str):
         try:
-            return self.repository.getById(id)
+            formulario = self.repository.getById(id)
+            perguntas = self.service.getFiltered(idFormulario=formulario.id) or []
+            formularioDto = map_formulario_to_dto_no_pergunta(formulario, perguntas)
+            return formularioDto
         except Exception as e:
             self.log.error(e)
     def getFiltered(self, ordem: str = 'desc', limit: int = 10, offset: int = 0, titulo:str=None, descricao:str=None):
