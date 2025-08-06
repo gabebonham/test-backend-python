@@ -9,18 +9,22 @@ class RespostaPerguntaRepository:
         self.con = engine
         self.log = LogUtil().log
 
-        self.queryGetAll = 'SELECT * FROM respostas_pergunta  LIMIT {limit} OFFSET {offset};'
+        self.queryGetAll = 'SELECT * FROM respostas_pergunta LIMIT {limit} OFFSET {offset};'
         self.queryGetById = "SELECT * FROM respostas_pergunta WHERE id = '{id}';"
         self.queryDelete = "DELETE FROM respostas_pergunta WHERE id = '{id}';"
+        self.queryGetFiltered = (
+            "SELECT * FROM respostas_pergunta "
+            " {where_clause} "
+            " LIMIT {limit} OFFSET {offset};"
+        )
         self.queryCreate = (
             "INSERT INTO respostas_pergunta (idOpcaoResposta, idPergunta) "
-            "VALUES ( '{idOpcaoResposta}', '{idPergunta}') RETURNING id;"
+            "VALUES ( '{idopcaoresposta}', '{idpergunta}') RETURNING id;"
         )
         self.queryUpdate = (
             "UPDATE respostas_pergunta SET "
-            "idOpcaoResposta = '{idOpcaoResposta}', "
-            "idPergunta = '{idPergunta}', "
-            "createdAt = '{createdAt}' "
+            "idOpcaoResposta = '{idopcaoresposta}', "
+            "idPergunta = '{idpergunta}', "
             "WHERE id = '{id}';"
         )
 
@@ -51,10 +55,10 @@ class RespostaPerguntaRepository:
                 filters = []
 
                 if idPergunta:
-                    filters.append(f"idPergunta ILIKE '%{idPergunta}%'")
+                    filters.append(f"idPergunta = '{idPergunta}'")
 
                 if idOpcaoResposta:
-                    filters.append(f"idOpcaoResposta ILIKE '%{idOpcaoResposta}%'")
+                    filters.append(f"idOpcaoResposta = '{idOpcaoResposta}'")
 
                 where_clause = f"WHERE {' AND '.join(filters)}" if filters else ""
 
@@ -62,15 +66,14 @@ class RespostaPerguntaRepository:
                     where_clause=where_clause,
                     limit=limit,
                     offset=offset,
-                    idPergunta=idPergunta,
-                    idOpcaoResposta=idOpcaoResposta
                 )
 
-                formularios = self.executeQuery(query)
-                if formularios is None:
+                results = self.executeQuery(query)
+                if results is None:
                     return []
-
-                return formularios.fetchall()
+                print(results)
+                print(results.fetchall())
+                return results.fetchall()
 
             except Exception as e:
                 self.log.error(f'Erro ao buscar Resposta_Pergunta filtrados: {e}')
@@ -100,8 +103,8 @@ class RespostaPerguntaRepository:
     def create(self, resposta: RespostaPergunta):
         try:
             query = self.queryCreate.format(
-                idOpcaoResposta=resposta.idOpcaoResposta,
-                idPergunta=resposta.idPergunta,
+                idopcaoresposta=resposta.idopcaoresposta,
+                idpergunta=resposta.idpergunta,
             )
             self.log.info('Resposta criada com sucesso.')
             return self.executeQuery(query)
@@ -112,9 +115,9 @@ class RespostaPerguntaRepository:
         try:
             query = self.queryUpdate.format(
                 id=resposta.id,
-                idOpcaoResposta=resposta.idOpcaoResposta,
-                idPergunta=resposta.idPergunta,
-                createdAt=resposta.createdAt.isoformat()
+                idopcaoresposta=resposta.idopcaoresposta,
+                idpergunta=resposta.idpergunta,
+                createdat=resposta.createdat.isoformat()
             )
             self.executeQuery(query)
             self.log.info('Resposta atualizada com sucesso.')

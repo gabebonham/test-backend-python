@@ -1,23 +1,35 @@
 import json
 from utils.log_util import LogUtil
 from repository.resposta_repository import RespostaRepository
+from services.resposta_pergunta_service import RespostaPerguntaService
 from models.resposta import Resposta
 class RespostaService:
     def __init__(self):
         self.log = LogUtil().log
         self.repository = RespostaRepository()
+        self.service = RespostaPerguntaService()
         pass
     
     def getAll(self, ordem:str='desc',
                limite: int = 10, 
                offset: int = 0):
         try:
-            return self.repository.getAll(ordem,limite,offset)
+            respostas = self.repository.getAll(ordem,limite,offset)
+            for resposta in respostas:
+                vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
+                if vezesrespondidas:
+                    resposta.vezesrespondidas = vezesrespondidas
+            return respostas
         except Exception as e:
             self.log.error(e)
     def getById(self, id: str):
         try:
-            return self.repository.getById(id)
+            resposta = self.repository.getById(id)
+            vezesrespondidas = len(self.service.getFiltered(idOpcaoResposta=resposta.id))
+            if vezesrespondidas:
+                resposta.vezesrespondidas = vezesrespondidas
+            
+            return resposta
         except Exception as e:
             self.log.error(e)
     def getFiltered(self, ordem: str = 'desc', 

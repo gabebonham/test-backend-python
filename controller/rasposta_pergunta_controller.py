@@ -11,8 +11,6 @@ class RespostaPerguntaController:
         self.router.get("/respostas-perguntas", tags=["respostas-perguntas"])(self.getAll)
         self.router.get("/respostas-perguntas/{id}", tags=["respostas-perguntas"])(self.getById)
         self.router.post("/respostas-perguntas", tags=["respostas-perguntas"])(self.create)
-        self.router.put("/respostas-perguntas", tags=["respostas-perguntas"])(self.update)
-        self.router.delete("/respostas-perguntas/{id}", tags=["respostas-perguntas"])(self.delete)
 
     async def getAll(self,
                      limite: Optional[int] = Query(10),
@@ -35,8 +33,3 @@ class RespostaPerguntaController:
     async def create(self, respostaPergunta:RespostaPergunta):
         return obj_to_dict(self.service.create(respostaPergunta))
     
-    async def delete(self, id:str):
-        return obj_to_dict(self.service.delete(id))
-    
-    async def update(self, respostaPergunta:RespostaPergunta):
-        return obj_to_dict(self.service.update(respostaPergunta))

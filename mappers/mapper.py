@@ -19,6 +19,7 @@ def obj_to_dict(obj):
     else:
         return {attr: getattr(obj, attr) for attr in dir(obj) if not attr.startswith("_")}
     
+    
 
 def map_formulario_to_dto(model: Formulario, perguntas: list=[]) -> FormularioDTO:
     return FormularioDTO(
@@ -58,5 +59,6 @@ def map_resposta_to_dto(resposta:Resposta):
         resposta=resposta.resposta,
         ordem=resposta.ordem,
         respostaaberta=resposta.respostaaberta,
-        createdat=resposta.createdat,
+        vezesrespondidas=resposta.vezesrespondidas or [],
+        createdat=resposta.createdat
     )

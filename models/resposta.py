@@ -9,4 +9,5 @@ class Resposta(BaseModel):
     resposta: Optional[str] = None
     ordem: Optional[int] = None
     respostaaberta: Optional[bool] = None
+    vezesrespondidas: Optional[list] = None
     createdat: Optional[datetime] = None

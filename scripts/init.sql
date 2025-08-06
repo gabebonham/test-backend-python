@@ -17,7 +17,7 @@ CREATE TABLE perguntas (
     ordem INTEGER NOT NULL,
     obrigatoria BOOLEAN NOT NULL,
     subPergunta TEXT,
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tipoPergunta VARCHAR(100)
 );
 
@@ -27,18 +27,19 @@ CREATE TABLE respostas (
     resposta TEXT NOT NULL,
     ordem INTEGER NOT NULL,
     respostaAberta BOOLEAN NOT NULL,
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
 
 CREATE TABLE respostas_pergunta (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    idOpcaoResposta UUID NOT NULL,
+    idOpcaoResposta UUID NOT NULL REFERENCES respostas(id) ON DELETE CASCADE,
     idPergunta UUID NOT NULL REFERENCES perguntas(id) ON DELETE CASCADE,
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
 
 CREATE INDEX idx_perguntas_idFormulario ON perguntas(idFormulario);
 CREATE INDEX idx_respostas_idPergunta ON respostas(idPergunta);
 CREATE INDEX idx_respostas_pergunta_idPergunta ON respostas_pergunta(idPergunta);
+CREATE INDEX idx_respostas_pergunta_idOpcaoResposta ON respostas_pergunta(idOpcaoResposta);

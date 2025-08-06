@@ -5,6 +5,6 @@ from uuid import UUID
 
 class RespostaPergunta(BaseModel):
     id: Optional[UUID] = None
-    idOpcaoResposta: Optional[str] = None
-    idPergunta: Optional[str] = None
-    createdAt: Optional[datetime] = None
+    idopcaoresposta: Optional[str] = None
+    idpergunta: Optional[str] = None
+    createdat: Optional[datetime] = None

@@ -20,6 +20,7 @@ class RespostasController:
                      offset: Optional[int] = Query(0)
                      ):
         data = self.service.getAll(ordem, limite, offset)
+        print(data)
         lista = [obj_to_dict(row) for row in data]
         return lista
     async def getFiltered(self,ordem: Optional[str] = Query(None), 
